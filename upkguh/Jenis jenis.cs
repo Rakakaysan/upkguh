@@ -12,6 +12,7 @@ namespace upkguh
 {
     public partial class Jenis_jenis : UserControl
     {
+        //oljdfsjklgfdjdjkldjlkgrkkopsgjkopj
         public Jenis_jenis()
         {
             InitializeComponent();
