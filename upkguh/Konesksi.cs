@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace upkguh
+﻿namespace upkguh
 {
     internal class Konesksi
     {
         public static string conn = "" +
-            "Data Source = AVATARR\\MSSQLSERVER01; " +
+            "Data Source = ARAN\\SQLEXPRESS01; " +
             "Initial Catalog = DBUPK; " +
             "Integrated Security = True; " +
             "TrustServerCertificate = True; ";

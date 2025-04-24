@@ -10,11 +10,11 @@ using System.Windows.Forms;
 
 namespace upkguh
 {
-    public partial class dashboardsiswa : UserControl
+    public partial class DashboardSiswa : UserControl
     {
-        public dashboardsiswa()
+        public DashboardSiswa()
         {
-            InitializeComponent();
+InitializeComponent();
         }
     }
 }

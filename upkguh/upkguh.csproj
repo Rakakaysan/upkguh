@@ -172,29 +172,29 @@
     <Compile Include="Contoh.Designer.cs">
       <DependentUpon>Contoh.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dashboard Admin.cs">
+    <Compile Include="DashboardAdmin.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Dashboard Admin.Designer.cs">
-      <DependentUpon>Dashboard Admin.cs</DependentUpon>
+    <Compile Include="DashboardAdmin.Designer.cs">
+      <DependentUpon>DashboardAdmin.cs</DependentUpon>
     </Compile>
-    <Compile Include="dashboardsiswa.cs">
+    <Compile Include="DashboardSiswa.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="dashboardsiswa.Designer.cs">
-      <DependentUpon>dashboardsiswa.cs</DependentUpon>
+    <Compile Include="DashboardSiswa.Designer.cs">
+      <DependentUpon>DashboardSiswa.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form1.cs">
+    <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="LoginForm.Designer.cs">
+      <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form2.cs">
+    <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form2.Designer.cs">
-      <DependentUpon>Form2.cs</DependentUpon>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Fungsi.cs">
       <SubType>UserControl</SubType>
@@ -202,23 +202,23 @@
     <Compile Include="Fungsi.Designer.cs">
       <DependentUpon>Fungsi.cs</DependentUpon>
     </Compile>
-    <Compile Include="Informasi Pengguna.cs">
+    <Compile Include="InformasiPengguna.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Informasi Pengguna.Designer.cs">
-      <DependentUpon>Informasi Pengguna.cs</DependentUpon>
+    <Compile Include="InformasiPengguna.Designer.cs">
+      <DependentUpon>InformasiPengguna.cs</DependentUpon>
     </Compile>
-    <Compile Include="Jenis jenis.cs">
+    <Compile Include="JenisJenis.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Jenis jenis.Designer.cs">
-      <DependentUpon>Jenis jenis.cs</DependentUpon>
+    <Compile Include="JenisJenis.Designer.cs">
+      <DependentUpon>JenisJenis.cs</DependentUpon>
     </Compile>
-    <Compile Include="kompetisi.cs">
+    <Compile Include="Kompetisi.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="kompetisi.Designer.cs">
-      <DependentUpon>kompetisi.cs</DependentUpon>
+    <Compile Include="Kompetisi.Designer.cs">
+      <DependentUpon>Kompetisi.cs</DependentUpon>
     </Compile>
     <Compile Include="Koneksi.cs">
       <SubType>UserControl</SubType>
@@ -227,17 +227,17 @@
       <DependentUpon>Koneksi.cs</DependentUpon>
     </Compile>
     <Compile Include="Konesksi.cs" />
-    <Compile Include="manajemen pengguna.cs">
+    <Compile Include="ManajemenPengguna.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="manajemen pengguna.Designer.cs">
-      <DependentUpon>manajemen pengguna.cs</DependentUpon>
+    <Compile Include="ManajemenPengguna.Designer.cs">
+      <DependentUpon>ManajemenPengguna.cs</DependentUpon>
     </Compile>
-    <Compile Include="Materi Pembelajaran.cs">
+    <Compile Include="MateriPembelajaran.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Materi Pembelajaran.Designer.cs">
-      <DependentUpon>Materi Pembelajaran.cs</DependentUpon>
+    <Compile Include="MateriPembelajaran.Designer.cs">
+      <DependentUpon>MateriPembelajaran.cs</DependentUpon>
     </Compile>
     <Compile Include="Materi.cs">
       <SubType>UserControl</SubType>
@@ -245,25 +245,25 @@
     <Compile Include="Materi.Designer.cs">
       <DependentUpon>Materi.cs</DependentUpon>
     </Compile>
-    <Compile Include="Pengertian .cs">
+    <Compile Include="Pengertian.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Pengertian .Designer.cs">
-      <DependentUpon>Pengertian .cs</DependentUpon>
+    <Compile Include="Pengertian.Designer.cs">
+      <DependentUpon>Pengertian.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="siswa.cs">
+    <Compile Include="SiswaForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="siswa.Designer.cs">
-      <DependentUpon>siswa.cs</DependentUpon>
+    <Compile Include="SiswaForm.Designer.cs">
+      <DependentUpon>SiswaForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tentang apk.cs">
+    <Compile Include="TentangAPK.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Tentang apk.Designer.cs">
-      <DependentUpon>Tentang apk.cs</DependentUpon>
+    <Compile Include="TentangAPK.Designer.cs">
+      <DependentUpon>TentangAPK.cs</DependentUpon>
     </Compile>
     <Compile Include="Tugas.cs">
       <SubType>UserControl</SubType>
@@ -271,47 +271,53 @@
     <Compile Include="Tugas.Designer.cs">
       <DependentUpon>Tugas.cs</DependentUpon>
     </Compile>
+    <Compile Include="TugasAdmin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TugasAdmin.Designer.cs">
+      <DependentUpon>TugasAdmin.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="CiriCiri.resx">
       <DependentUpon>CiriCiri.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Contoh.resx">
       <DependentUpon>Contoh.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dashboard Admin.resx">
-      <DependentUpon>Dashboard Admin.cs</DependentUpon>
+    <EmbeddedResource Include="DashboardAdmin.resx">
+      <DependentUpon>DashboardAdmin.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="dashboardsiswa.resx">
-      <DependentUpon>dashboardsiswa.cs</DependentUpon>
+    <EmbeddedResource Include="DashboardSiswa.resx">
+      <DependentUpon>DashboardSiswa.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="LoginForm.resx">
+      <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form2.resx">
-      <DependentUpon>Form2.cs</DependentUpon>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fungsi.resx">
       <DependentUpon>Fungsi.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Informasi Pengguna.resx">
-      <DependentUpon>Informasi Pengguna.cs</DependentUpon>
+    <EmbeddedResource Include="InformasiPengguna.resx">
+      <DependentUpon>InformasiPengguna.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Jenis jenis.resx">
-      <DependentUpon>Jenis jenis.cs</DependentUpon>
+    <EmbeddedResource Include="JenisJenis.resx">
+      <DependentUpon>JenisJenis.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="kompetisi.resx">
-      <DependentUpon>kompetisi.cs</DependentUpon>
+    <EmbeddedResource Include="Kompetisi.resx">
+      <DependentUpon>Kompetisi.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="manajemen pengguna.resx">
-      <DependentUpon>manajemen pengguna.cs</DependentUpon>
+    <EmbeddedResource Include="ManajemenPengguna.resx">
+      <DependentUpon>ManajemenPengguna.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Materi Pembelajaran.resx">
-      <DependentUpon>Materi Pembelajaran.cs</DependentUpon>
+    <EmbeddedResource Include="MateriPembelajaran.resx">
+      <DependentUpon>MateriPembelajaran.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Materi.resx">
       <DependentUpon>Materi.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Pengertian .resx">
-      <DependentUpon>Pengertian .cs</DependentUpon>
+    <EmbeddedResource Include="Pengertian.resx">
+      <DependentUpon>Pengertian.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -322,14 +328,17 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="siswa.resx">
-      <DependentUpon>siswa.cs</DependentUpon>
+    <EmbeddedResource Include="SiswaForm.resx">
+      <DependentUpon>SiswaForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Tentang apk.resx">
-      <DependentUpon>Tentang apk.cs</DependentUpon>
+    <EmbeddedResource Include="TentangAPK.resx">
+      <DependentUpon>TentangAPK.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tugas.resx">
       <DependentUpon>Tugas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TugasAdmin.resx">
+      <DependentUpon>TugasAdmin.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
