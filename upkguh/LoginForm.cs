@@ -1,25 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace upkguh
 {
-    public partial class Form1 : Form
+    public partial class LoginForm : Form
     {
         public SqlConnection connection = new SqlConnection(Konesksi.conn);
         public SqlCommand command;
         public SqlDataAdapter adapter;
         public DataTable tabel;
         public SqlDataReader reader;
-        public Form1()
+        public LoginForm()
         {
             InitializeComponent();
         }
@@ -51,7 +44,7 @@ namespace upkguh
                     Model.name = reader.GetString(1);
 
                     this.Hide();
-                    Form2 window = new Form2();
+                    MainForm window = new MainForm();
                     window.Show();
                 }
                 else if (row["role"].ToString() == "siswa")
@@ -80,7 +73,7 @@ namespace upkguh
 
         private void Form1_Load(object sender, EventArgs e)
         {
-           
+
         }
     }
 }
