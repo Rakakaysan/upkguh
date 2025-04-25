@@ -15,6 +15,7 @@ namespace upkguh
         {
             InitializeComponent();
             ConfigureDataGridView(); // Optional: Configure DGV appearance/behavior
+            this.search.TextChanged += new System.EventHandler(this.search_TextChanged);
             ShowData();
             ClearInputs(); // Start with clean inputs
         }
@@ -30,59 +31,97 @@ namespace upkguh
         }
 
         // --- READ ---
-        public void ShowData()
+        // Update Signature: Add optional searchTerm parameter
+        public void ShowData(string searchTerm = null)
+        // End Update Signature
         {
+            // Add this line: Base SQL query without WHERE clause
+            string sql = "SELECT NIP, [nama lengkap], jabatan, status, username, password FROM [manajemen]";
+
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                using (SqlCommand command = new SqlCommand("SELECT NIP, [nama lengkap], jabatan, status, username, password FROM [manajemen]", connection))
-                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                // Add this block: Modify SQL and add parameter if searchTerm is provided
+                if (!string.IsNullOrWhiteSpace(searchTerm))
                 {
-                    DataTable tabel = new DataTable();
-                    adapter.Fill(tabel);
+                    // Search across multiple relevant fields (NIP, Nama, Username)
+                    // Use LIKE for partial matches. CAST NIP to VARCHAR for LIKE comparison.
+                    sql += @" WHERE CAST(NIP AS VARCHAR(20)) LIKE @SearchTerm
+                      OR [nama lengkap] LIKE @SearchTerm
+                      OR username LIKE @SearchTerm
+                      OR jabatan LIKE @SearchTerm
+                      OR status LIKE @SearchTerm";
+                }
+                // End Add block
 
-                    dataGridView1.DataSource = null; // Clear previous data source
-                    dataGridView1.DataSource = tabel; // Bind new data
-                    dataGridView1.ClearSelection(); // Deselect any rows initially
-
-                    // Set Header Text (Important: Do this *after* setting DataSource)
-                    if (dataGridView1.Columns.Count >= 6)
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                // Update this line: Use the dynamically built 'sql' variable
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                // End Update line
+                {
+                    // Add this block: Add the search parameter IF searchTerm was provided
+                    if (!string.IsNullOrWhiteSpace(searchTerm))
                     {
-                        dataGridView1.Columns["NIP"].HeaderText = "NIP";
-                        dataGridView1.Columns["nama lengkap"].HeaderText = "Nama Lengkap"; // Match exact column name from SQL
-                        dataGridView1.Columns["jabatan"].HeaderText = "Jabatan";
-                        dataGridView1.Columns["status"].HeaderText = "Status";
-                        dataGridView1.Columns["username"].HeaderText = "Username";
-                        dataGridView1.Columns["password"].HeaderText = "Password"; // Consider hiding or masking this column for security
-
-                        // Optional: Hide password column if desired
-                        // dataGridView1.Columns["password"].Visible = false;
+                        // Add '%' wildcards for partial matching
+                        command.Parameters.AddWithValue("@SearchTerm", $"%{searchTerm}%");
                     }
-                    else if (dataGridView1.Columns.Count > 0)
+                    // End Add block
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
-                        // Fallback if fewer columns than expected
-                        for (int i = 0; i < dataGridView1.Columns.Count; i++)
+                        DataTable tabel = new DataTable();
+                        adapter.Fill(tabel);
+
+                        // --- Keep the rest of the ShowData method as is from here ---
+                        dataGridView1.DataSource = null; // Clear previous data source
+                        dataGridView1.DataSource = tabel; // Bind new data
+                        dataGridView1.ClearSelection(); // Deselect any rows initially
+
+                        // Set Header Text (Important: Do this *after* setting DataSource)
+                        if (dataGridView1.Columns.Count >= 6)
                         {
-                            dataGridView1.Columns[i].HeaderText = tabel.Columns[i].ColumnName; // Use original names
+                            dataGridView1.Columns["NIP"].HeaderText = "NIP";
+                            dataGridView1.Columns["nama lengkap"].HeaderText = "Nama Lengkap";
+                            dataGridView1.Columns["jabatan"].HeaderText = "Jabatan";
+                            dataGridView1.Columns["status"].HeaderText = "Status";
+                            dataGridView1.Columns["username"].HeaderText = "Username";
+                            dataGridView1.Columns["password"].HeaderText = "Password";
+                            // dataGridView1.Columns["password"].Visible = false;
                         }
-                    }
+                        else if (dataGridView1.Columns.Count > 0)
+                        {
+                            for (int i = 0; i < dataGridView1.Columns.Count; i++)
+                            {
+                                dataGridView1.Columns[i].HeaderText = tabel.Columns[i].ColumnName;
+                            }
+                        }
 
-
-                    if (tabel.Rows.Count == 0)
-                    {
-                        // Optional: Display a message if the table is empty
-                        // MessageBox.Show("Tidak ada data pengguna di tabel manajemen.");
+                        if (tabel.Rows.Count == 0 && !string.IsNullOrWhiteSpace(searchTerm))
+                        {
+                            // Optional: Indicate if search yielded no results
+                            // MessageBox.Show($"Data dengan kata kunci '{searchTerm}' tidak ditemukan.");
+                        }
+                        else if (tabel.Rows.Count == 0)
+                        {
+                            // Optional: Indicate table is empty (no search term)
+                            // MessageBox.Show("Tidak ada data pengguna di tabel manajemen.");
+                        }
                     }
                 } // using statements automatically close the connection
             }
             catch (SqlException ex)
             {
-                MessageBox.Show("Database Error saat menampilkan data: " + ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Database Error saat menampilkan/mencari data: " + ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error saat menampilkan data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error saat menampilkan/mencari data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void search_TextChanged(object sender, EventArgs e)
+        {
+            // Call ShowData, passing the current text from the search box
+            ShowData(search.Text);
         }
 
         // --- Helper: Clear Inputs ---
@@ -376,6 +415,16 @@ namespace upkguh
         // You might not need the Bedit button click if CellClick loads data.
         // If you keep Bedit, decide its function (e.g., maybe enable editing fields?)
         private void Bedit_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void Manajemen_pengguna_Load(object sender, EventArgs e)
         {
 
         }

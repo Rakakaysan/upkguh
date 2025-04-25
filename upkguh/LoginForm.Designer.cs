@@ -79,8 +79,10 @@
             // 
             this.tPassword.Location = new System.Drawing.Point(250, 143);
             this.tPassword.Name = "tPassword";
+            this.tPassword.PasswordChar = '*';
             this.tPassword.Size = new System.Drawing.Size(234, 26);
             this.tPassword.TabIndex = 3;
+            this.tPassword.UseSystemPasswordChar = true;
             // 
             // label2
             // 
@@ -119,14 +121,14 @@
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
             // 
-            // Form1
+            // LoginForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1141, 682);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.panel3);
-            this.Name = "Form1";
+            this.Name = "LoginForm";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel3.ResumeLayout(false);

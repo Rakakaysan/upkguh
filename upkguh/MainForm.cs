@@ -25,11 +25,6 @@ namespace upkguh
             materi_Pembelajaran1.BringToFront();
         }
 
-        private void informasi_Click(object sender, EventArgs e)
-        {
-            informasi_Pengguna1.BringToFront();
-
-
         private void tentang_Click(object sender, EventArgs e)
         {
             tentang_apk1.BringToFront();
@@ -48,6 +43,21 @@ namespace upkguh
         private void button1_Click(object sender, EventArgs e)
         {
             tugasAdmin1.BringToFront();
+        }
+
+        private void informasi_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void tentang_apk1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

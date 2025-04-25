@@ -15,9 +15,12 @@ namespace upkguh
         {
             InitializeComponent();
             ConfigureDataGridView(); // Optional: Improve DGV appearance
+            this.search.TextChanged += new System.EventHandler(this.search_TextChanged);
             ShowData();
             ClearInputs(); // Start with a clean form
         }
+
+
 
         private void ConfigureDataGridView()
         {
@@ -30,53 +33,96 @@ namespace upkguh
             // Consider setting specific column widths if Fill doesn't look right
         }
 
-        // --- READ ---
-        public void ShowData()
+        // Add this entire method: Event handler for search text changes
+        private void search_TextChanged(object sender, EventArgs e)
         {
+            // Call ShowData, passing the current text from the search box
+            // Make sure your search TextBox is named 'search' in the designer
+            ShowData(search.Text);
+        }
+        // End Add method
+
+
+        // --- READ ---
+        // Update Signature: Add optional searchTerm parameter
+        public void ShowData(string searchTerm = null)
+        // End Update Signature
+        {
+            // Add this line: Base SQL query (without ORDER BY initially)
+            string sql = "SELECT id_materi, nama_materi, konten_materi, url_youtube, tanggal_dibuat, tanggal_diubah FROM materi_pembelajaran";
+
             try
             {
-                // Using statement ensures connection is closed even if errors occur
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                using (SqlCommand command = new SqlCommand("SELECT id_materi, nama_materi, konten_materi, url_youtube, tanggal_dibuat, tanggal_diubah FROM materi_pembelajaran ORDER BY nama_materi", connection))
-                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                // Add this block: Modify SQL and add parameter if searchTerm is provided
+                if (!string.IsNullOrWhiteSpace(searchTerm))
                 {
-                    DataTable tabel = new DataTable();
-                    adapter.Fill(tabel);
+                    // Search relevant text fields
+                    sql += @" WHERE nama_materi LIKE @SearchTerm
+                      OR konten_materi LIKE @SearchTerm
+                      OR url_youtube LIKE @SearchTerm";
+                    // Note: Searching NVARCHAR(MAX) with LIKE can be slow on large tables
+                }
+                // End Add block
 
-                    dataGridView1.DataSource = null; // Clear previous data
-                    dataGridView1.DataSource = tabel;
-                    dataGridView1.ClearSelection(); // Deselect any rows
+                // Add this line: Append ORDER BY clause at the end
+                sql += " ORDER BY nama_materi";
+                // End Add line
 
-                    // Set Header Text & Hide ID Column (Do this *after* setting DataSource)
-                    if (dataGridView1.Columns.Count > 0)
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                // Update this line: Use the dynamically built 'sql' variable
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                // End Update line
+                {
+                    // Add this block: Add the search parameter IF searchTerm was provided
+                    if (!string.IsNullOrWhiteSpace(searchTerm))
                     {
-                        dataGridView1.Columns["id_materi"].Visible = false; // Hide internal ID
-                        dataGridView1.Columns["nama_materi"].HeaderText = "Nama Materi";
-                        dataGridView1.Columns["konten_materi"].HeaderText = "Konten";
-                        dataGridView1.Columns["url_youtube"].HeaderText = "URL YouTube";
-                        dataGridView1.Columns["tanggal_dibuat"].HeaderText = "Tgl Dibuat";
-                        dataGridView1.Columns["tanggal_diubah"].HeaderText = "Tgl Diubah";
-
-                        // Optional: Format date columns if needed
-                        dataGridView1.Columns["tanggal_dibuat"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
-                        dataGridView1.Columns["tanggal_diubah"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+                        command.Parameters.AddWithValue("@SearchTerm", $"%{searchTerm}%");
                     }
+                    // End Add block
 
-
-                    if (tabel.Rows.Count == 0)
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
-                        // Optional: Inform user if table is empty
-                        // MessageBox.Show("Belum ada data materi pembelajaran.");
+                        DataTable tabel = new DataTable();
+                        adapter.Fill(tabel);
+
+                        // --- Keep the rest of the ShowData method (DataGridView setup) as is ---
+                        dataGridView1.DataSource = null;
+                        dataGridView1.DataSource = tabel;
+                        dataGridView1.ClearSelection();
+
+                        if (dataGridView1.Columns.Count > 0)
+                        {
+                            dataGridView1.Columns["id_materi"].Visible = false;
+                            dataGridView1.Columns["nama_materi"].HeaderText = "Nama Materi";
+                            dataGridView1.Columns["konten_materi"].HeaderText = "Konten"; // Consider hiding if not needed in grid
+                            dataGridView1.Columns["url_youtube"].HeaderText = "URL YouTube"; // Consider hiding if not needed in grid
+                            dataGridView1.Columns["tanggal_dibuat"].HeaderText = "Tgl Dibuat";
+                            dataGridView1.Columns["tanggal_diubah"].HeaderText = "Tgl Diubah";
+                            dataGridView1.Columns["tanggal_dibuat"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+                            dataGridView1.Columns["tanggal_diubah"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+                        }
+
+                        if (tabel.Rows.Count == 0)
+                        {
+                            // Optional: Inform user based on whether search was active
+                            // if (!string.IsNullOrWhiteSpace(searchTerm))
+                            //     MessageBox.Show($"Materi dengan kata kunci '{searchTerm}' tidak ditemukan.");
+                            // else
+                            //     MessageBox.Show("Belum ada data materi pembelajaran.");
+                        }
+                        // --- End of original ShowData logic ---
                     }
                 } // using automatically closes connection
             }
             catch (SqlException ex)
             {
-                MessageBox.Show("Database Error saat menampilkan data: " + ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Update Error Message slightly
+                MessageBox.Show("Database Error saat menampilkan/mencari data materi: " + ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error saat menampilkan data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Update Error Message slightly
+                MessageBox.Show("Error saat menampilkan/mencari data materi: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -274,6 +320,11 @@ namespace upkguh
         private void Bcancel_Click(object sender, EventArgs e)
         {
             ClearInputs();
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -202,12 +202,6 @@
     <Compile Include="Fungsi.Designer.cs">
       <DependentUpon>Fungsi.cs</DependentUpon>
     </Compile>
-    <Compile Include="InformasiPengguna.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="InformasiPengguna.Designer.cs">
-      <DependentUpon>InformasiPengguna.cs</DependentUpon>
-    </Compile>
     <Compile Include="JenisJenis.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -297,9 +291,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fungsi.resx">
       <DependentUpon>Fungsi.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="InformasiPengguna.resx">
-      <DependentUpon>InformasiPengguna.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="JenisJenis.resx">
       <DependentUpon>JenisJenis.cs</DependentUpon>

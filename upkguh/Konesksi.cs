@@ -3,7 +3,7 @@
     internal class Konesksi
     {
         public static string conn = "" +
-            "Data Source = ARAN\\SQLEXPRESS01; " +
+            "Data Source = LAPTOP-82FOTN2U\\SQLEXPRESS01; " +
             "Initial Catalog = DBUPK; " +
             "Integrated Security = True; " +
             "TrustServerCertificate = True; ";
