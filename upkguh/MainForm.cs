@@ -28,7 +28,6 @@ namespace upkguh
         private void informasi_Click(object sender, EventArgs e)
         {
             informasi_Pengguna1.BringToFront();
-        }
 
 
         private void tentang_Click(object sender, EventArgs e)
