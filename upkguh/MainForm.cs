@@ -59,5 +59,19 @@ namespace upkguh
         {
 
         }
+
+        private void PengumpulanTugas_Click(object sender, EventArgs e)
+        {
+            pengumpulanTugas1.BringToFront();
+        }
+
+        private void refreshBtn_Click(object sender, EventArgs e)
+        {
+            manajemen_pengguna1.ShowData();
+            materi_Pembelajaran1.ShowData();
+            tugasAdmin1.ShowData();
+            pengumpulanTugas1.LoadTugasComboBox();
+            pengumpulanTugas1.ClearDetails();
+        }
     }
 }

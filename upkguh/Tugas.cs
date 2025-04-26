@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient; // Added
+using System;
 using System.Data;
-using System.Data.SqlClient;
 using System.Globalization;
+
+//using System.Data.SqlClient; // Can remove if using Microsoft.Data.SqlClient
 using System.Windows.Forms;
 
 namespace upkguh
@@ -9,100 +11,261 @@ namespace upkguh
     public partial class Tugas : UserControl
     {
         private string connectionString = Konesksi.conn;
-        private int? _selectedTugasId = null; // To store the ID of the selected row for update/delete
+        private int? _selectedTugasId = null;
+        // **** IMPORTANT: Assume you have a way to get the current student's ID ****
+        // **** Replace this with your actual implementation ****
+        //private int _currentUserId = CurrentUser.UserId; // Example: Get ID from a static class
+        private int _currentUserId = Model.id; // Example: Get ID from a static class
 
         public Tugas()
         {
             InitializeComponent();
             ConfigureDataGridView();
-            ShowData();
-            UpdateDateLabel();
+
+            // Add this line: Attach event handler for the search TextBox
+            this.search.TextChanged += new System.EventHandler(this.search_TextChanged);
+            // End Add line
+
+            ShowData(); // Initial load
+            UpdateDateLabel(); // This label doesn't exist in the provided designer code
+            ClearDetails(); // Clear details initially
         }
 
         private void ConfigureDataGridView()
         {
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.MultiSelect = false;
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.ReadOnly = true;
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridView1.RowHeadersVisible = false; // Optional: Hide row header column
+            listTugasDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            listTugasDataGridView.MultiSelect = false;
+            listTugasDataGridView.AllowUserToAddRows = false;
+            listTugasDataGridView.AllowUserToDeleteRows = false;
+            listTugasDataGridView.ReadOnly = true;
+            listTugasDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            listTugasDataGridView.RowHeadersVisible = false;
 
-            // Attach the event handler for cell clicks
-            dataGridView1.CellClick += dataGridView1_CellClick;
+            listTugasDataGridView.CellClick -= dataGridView1_CellClick; // Remove if added previously
+            listTugasDataGridView.CellClick += dataGridView1_CellClick; // Add event handler
+        }
+
+        private void ClearDetails()
+        {
+            _selectedTugasId = null;
+            NamaTugas.Text = "-";
+            KontenTugas.Text = "-";
+            JawabanTugasInput.Text = "";
+            StatusTugasLabel.Text = "Pilih tugas dari daftar";
+            JawabanTugasInput.ReadOnly = true;
+            KumpulkanButton.Enabled = false;
+            listTugasDataGridView.ClearSelection();
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Ensure a valid row is clicked (not the header)
-            if (e.RowIndex >= 0 && e.RowIndex < dataGridView1.Rows.Count)
+            if (e.RowIndex >= 0 && e.RowIndex < listTugasDataGridView.Rows.Count)
             {
-                DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
-
+                DataGridViewRow row = listTugasDataGridView.Rows[e.RowIndex];
                 try
                 {
-                    // Get the ID from the hidden column
                     _selectedTugasId = Convert.ToInt32(row.Cells["id_tugas"].Value);
-
-                    // Populate the input fields (handle potential DBNull values)
                     NamaTugas.Text = row.Cells["nama_tugas"].Value?.ToString() ?? "";
-                    DeskripsiTugas.Text = row.Cells["deskripsi_tugas"].Value?.ToString() ?? ""; // RichTextBox handles nulls okay
-                }
-                catch (FormatException ex)
-                {
-                    MessageBox.Show("Error konversi ID tugas: " + ex.Message, "Error Tipe Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // KontenTugas is a Label, use Text property
+                    KontenTugas.Text = row.Cells["deskripsi_tugas"].Value?.ToString() ?? "Tidak ada deskripsi.";
+
+                    // Now check submission status for this task and user
+                    CheckSubmissionStatus();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error memuat data dari baris: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Error memuat detail tugas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ClearDetails();
                 }
             }
         }
 
-        public void ShowData()
+        // Method to check submission status
+        private void CheckSubmissionStatus()
         {
+            if (_selectedTugasId == null) return; // No task selected
+
+            StatusTugasLabel.Text = "Memeriksa status...";
+            JawabanTugasInput.Text = "";
+            JawabanTugasInput.ReadOnly = true;
+            KumpulkanButton.Enabled = false;
+
+            string sql = @"SELECT jawaban_tugas, nilai
+                           FROM pengumpulan_tugas
+                           WHERE id_tugas = @id_tugas AND id_user = @id_user";
+
             try
             {
-                // Using statement ensures proper disposal of resources
                 using (SqlConnection connection = new SqlConnection(connectionString))
-                using (SqlCommand command = new SqlCommand("SELECT id_tugas, nama_tugas, deskripsi_tugas, tanggal_dibuat, tanggal_diubah FROM tugas ORDER BY tanggal_dibuat DESC", connection)) // Order by newest first
-                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-                    DataTable tabel = new DataTable();
-                    adapter.Fill(tabel);
+                    command.Parameters.AddWithValue("@id_tugas", _selectedTugasId.Value);
+                    command.Parameters.AddWithValue("@id_user", _currentUserId);
 
-                    dataGridView1.DataSource = null; // Unbind previous data
-                    dataGridView1.DataSource = tabel;
-                    dataGridView1.ClearSelection();
-
-                    // Configure Columns (AFTER setting DataSource)
-                    if (dataGridView1.Columns.Count > 0)
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        dataGridView1.Columns["id_tugas"].Visible = false; // Hide internal ID
-                        dataGridView1.Columns["deskripsi_tugas"].Visible = false; // Description shown in RichTextBox
-                        dataGridView1.Columns["nama_tugas"].HeaderText = "Nama Tugas";
-                        dataGridView1.Columns["tanggal_dibuat"].HeaderText = "Tgl Dibuat";
-                        dataGridView1.Columns["tanggal_diubah"].HeaderText = "Tgl Diubah";
+                        if (reader.Read()) // Submission found
+                        {
+                            JawabanTugasInput.Text = reader["jawaban_tugas"]?.ToString() ?? "";
+                            object nilaiObj = reader["nilai"];
 
-                        // Optional: Adjust column widths or fill weights
-                        dataGridView1.Columns["nama_tugas"].FillWeight = 60;
-                        dataGridView1.Columns["tanggal_dibuat"].FillWeight = 20;
-                        dataGridView1.Columns["tanggal_diubah"].FillWeight = 20;
+                            if (nilaiObj != null && nilaiObj != DBNull.Value)
+                            {
+                                StatusTugasLabel.Text = $"Sudah Dinilai: {nilaiObj}";
+                                JawabanTugasInput.ReadOnly = true; // Cannot edit after grading
+                                KumpulkanButton.Enabled = false;
+                            }
+                            else
+                            {
+                                StatusTugasLabel.Text = "Sudah Dikumpulkan (Belum Dinilai)";
+                                // Decide if student can edit before grading
+                                JawabanTugasInput.ReadOnly = true; // Let's make it read-only once submitted
+                                KumpulkanButton.Enabled = false; // Cannot resubmit easily
+                            }
+                        }
+                        else // No submission found
+                        {
+                            StatusTugasLabel.Text = "Belum Dikumpulkan";
+                            JawabanTugasInput.ReadOnly = false; // Allow input
+                            KumpulkanButton.Enabled = true; // Allow submission
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                StatusTugasLabel.Text = "Error memeriksa status.";
+                MessageBox.Show("Error memeriksa status pengumpulan: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
-                        // Optional: Format date columns
-                        dataGridView1.Columns["tanggal_dibuat"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
-                        dataGridView1.Columns["tanggal_diubah"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+        // ShowData with Search functionality
+        public void ShowData(string searchTerm = null)
+        {
+            string sql = "SELECT id_tugas, nama_tugas, deskripsi_tugas, tanggal_dibuat, tanggal_diubah FROM tugas";
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(searchTerm))
+                {
+                    sql += " WHERE nama_tugas LIKE @SearchTerm OR deskripsi_tugas LIKE @SearchTerm";
+                }
+                sql += " ORDER BY tanggal_dibuat DESC";
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    if (!string.IsNullOrWhiteSpace(searchTerm))
+                    {
+                        command.Parameters.AddWithValue("@SearchTerm", $"%{searchTerm}%");
+                    }
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    {
+                        DataTable tabel = new DataTable();
+                        adapter.Fill(tabel);
+
+                        listTugasDataGridView.DataSource = null;
+                        listTugasDataGridView.DataSource = tabel;
+                        // Keep column configuration from original ShowData
+                        if (listTugasDataGridView.Columns.Count > 0)
+                        {
+                            listTugasDataGridView.Columns["id_tugas"].Visible = false;
+                            listTugasDataGridView.Columns["deskripsi_tugas"].Visible = false;
+                            listTugasDataGridView.Columns["nama_tugas"].HeaderText = "Nama Tugas";
+                            listTugasDataGridView.Columns["tanggal_dibuat"].HeaderText = "Tgl Dibuat";
+                            listTugasDataGridView.Columns["tanggal_diubah"].HeaderText = "Tgl Diubah";
+                            listTugasDataGridView.Columns["nama_tugas"].FillWeight = 60;
+                            listTugasDataGridView.Columns["tanggal_dibuat"].FillWeight = 20;
+                            listTugasDataGridView.Columns["tanggal_diubah"].FillWeight = 20;
+                            listTugasDataGridView.Columns["tanggal_dibuat"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+                            listTugasDataGridView.Columns["tanggal_diubah"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error menampilkan/mencari data tugas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            // Don't clear details here, only when selecting a different row or explicitly cancelling
+            // ClearDetails(); // Remove this if it was added unintentionally
+        }
+
+
+        // Event handler for search text changes
+        private void search_TextChanged(object sender, EventArgs e)
+        {
+            ShowData(search.Text);
+            // When search changes, selection might become invalid, so clear details
+            ClearDetails();
+        }
+
+        // Event handler for the submit button
+        private void KumpulkanButton_Click(object sender, EventArgs e)
+        {
+            if (_selectedTugasId == null)
+            {
+                MessageBox.Show("Pilih tugas yang ingin dikumpulkan terlebih dahulu.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(JawabanTugasInput.Text))
+            {
+                MessageBox.Show("Jawaban tidak boleh kosong.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                JawabanTugasInput.Focus();
+                return;
+            }
+
+            // Optional: Double-check status again before submitting
+            // CheckSubmissionStatus();
+            // if (!KumpulkanButton.Enabled) { // Check if enabled after status check
+            //     MessageBox.Show("Status tugas tidak memungkinkan untuk pengumpulan.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //     return;
+            // }
+
+            string sql = @"INSERT INTO pengumpulan_tugas (id_tugas, id_user, jawaban_tugas, tanggal_pengumpulan)
+                           VALUES (@id_tugas, @id_user, @jawaban, GETDATE())";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@id_tugas", _selectedTugasId.Value);
+                    command.Parameters.AddWithValue("@id_user", _currentUserId);
+                    command.Parameters.AddWithValue("@jawaban", JawabanTugasInput.Text);
+
+                    connection.Open();
+                    int rowsAffected = command.ExecuteNonQuery();
+
+                    if (rowsAffected > 0)
+                    {
+                        MessageBox.Show("Tugas berhasil dikumpulkan!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        // Refresh status after submission
+                        CheckSubmissionStatus();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Gagal mengumpulkan tugas.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
             catch (SqlException ex)
             {
-                MessageBox.Show("Database Error saat menampilkan data tugas: " + ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Check for unique constraint violation if student tries to submit twice (though UI should prevent)
+                if (ex.Number == 2627 || ex.Number == 2601) // Unique constraint violation codes
+                {
+                    MessageBox.Show("Anda sudah pernah mengumpulkan tugas ini.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    CheckSubmissionStatus(); // Refresh status to show existing submission
+                }
+                else
+                {
+                    MessageBox.Show("Database error saat mengumpulkan tugas: " + ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error saat menampilkan data tugas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error saat mengumpulkan tugas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -141,14 +304,17 @@ namespace upkguh
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void NamaTugas_Click(object sender, EventArgs e)
-        {
 
-        }
+        // Remove or comment out unused/placeholder methods
+        // private void UpdateDateLabel() { ... } // Only needed if dateLabel exists
+        // private void NamaTugas_Click(object sender, EventArgs e) { }
+        // private void Bsave_Click(object sender, EventArgs e) { } // Not used in student view
+    }
 
-        private void Bsave_Click(object sender, EventArgs e)
-        {
-            
-        }
+    // **** Example Static Class for Current User ID ****
+    // **** Implement this based on your login system ****
+    public static class CurrentUser
+    {
+        public static int UserId { get; set; } = 1; // Placeholder - Set this after login!
     }
 }

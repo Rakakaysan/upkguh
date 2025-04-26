@@ -60,7 +60,38 @@ namespace upkguh
             }
             else
             {
-                MessageBox.Show("Username atau password salah", "Gagal Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                connection.Close();
+                connection.Open();
+
+                username = tUsername.Text;
+                password = tPassword.Text;
+
+                sql = "SELECT * FROM [manajemen] WHERE username = @username AND password = @password";
+
+                command = new SqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@username", username);
+                command.Parameters.AddWithValue("@password", password);
+
+                adapter = new SqlDataAdapter(command);
+                tabel = new DataTable();
+                adapter.Fill(tabel);
+
+                if (tabel.Rows.Count > 0)
+                {
+                    reader = command.ExecuteReader();
+                    reader.Read();
+                    Model.id = reader.GetInt32(0);
+                    this.Hide();
+                    siswa windows = new siswa();
+                    windows.Show();
+                }
+
+                else
+                {
+                    MessageBox.Show("Username atau password salah", "Gagal Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                connection.Close();
             }
 
             connection.Close();

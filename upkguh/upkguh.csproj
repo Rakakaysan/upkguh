@@ -245,6 +245,12 @@
     <Compile Include="Pengertian.Designer.cs">
       <DependentUpon>Pengertian.cs</DependentUpon>
     </Compile>
+    <Compile Include="PengumpulanTugas.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PengumpulanTugas.Designer.cs">
+      <DependentUpon>PengumpulanTugas.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SiswaForm.cs">
@@ -309,6 +315,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Pengertian.resx">
       <DependentUpon>Pengertian.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PengumpulanTugas.resx">
+      <DependentUpon>PengumpulanTugas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
