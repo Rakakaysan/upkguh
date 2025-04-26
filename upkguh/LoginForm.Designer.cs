@@ -50,16 +50,18 @@
             this.panel3.Controls.Add(this.label2);
             this.panel3.Controls.Add(this.tUsername);
             this.panel3.Controls.Add(this.label1);
-            this.panel3.Location = new System.Drawing.Point(444, 196);
+            this.panel3.Location = new System.Drawing.Point(395, 157);
+            this.panel3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(526, 273);
+            this.panel3.Size = new System.Drawing.Size(468, 218);
             this.panel3.TabIndex = 2;
             // 
             // bcancel
             // 
-            this.bcancel.Location = new System.Drawing.Point(363, 204);
+            this.bcancel.Location = new System.Drawing.Point(323, 163);
+            this.bcancel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.bcancel.Name = "bcancel";
-            this.bcancel.Size = new System.Drawing.Size(121, 50);
+            this.bcancel.Size = new System.Drawing.Size(108, 40);
             this.bcancel.TabIndex = 5;
             this.bcancel.Text = "Cancel";
             this.bcancel.UseVisualStyleBackColor = true;
@@ -67,9 +69,10 @@
             // 
             // blogin
             // 
-            this.blogin.Location = new System.Drawing.Point(66, 204);
+            this.blogin.Location = new System.Drawing.Point(59, 163);
+            this.blogin.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.blogin.Name = "blogin";
-            this.blogin.Size = new System.Drawing.Size(121, 50);
+            this.blogin.Size = new System.Drawing.Size(108, 40);
             this.blogin.TabIndex = 4;
             this.blogin.Text = "Login";
             this.blogin.UseVisualStyleBackColor = true;
@@ -77,10 +80,11 @@
             // 
             // tPassword
             // 
-            this.tPassword.Location = new System.Drawing.Point(250, 143);
+            this.tPassword.Location = new System.Drawing.Point(222, 114);
+            this.tPassword.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tPassword.Name = "tPassword";
             this.tPassword.PasswordChar = '*';
-            this.tPassword.Size = new System.Drawing.Size(234, 26);
+            this.tPassword.Size = new System.Drawing.Size(208, 22);
             this.tPassword.TabIndex = 3;
             this.tPassword.UseSystemPasswordChar = true;
             // 
@@ -88,48 +92,53 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(61, 140);
+            this.label2.Location = new System.Drawing.Point(54, 112);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(120, 29);
+            this.label2.Size = new System.Drawing.Size(98, 25);
             this.label2.TabIndex = 2;
             this.label2.Text = "Password";
             // 
             // tUsername
             // 
-            this.tUsername.Location = new System.Drawing.Point(250, 60);
+            this.tUsername.Location = new System.Drawing.Point(222, 48);
+            this.tUsername.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tUsername.Name = "tUsername";
-            this.tUsername.Size = new System.Drawing.Size(234, 26);
+            this.tUsername.Size = new System.Drawing.Size(208, 22);
             this.tUsername.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(61, 60);
+            this.label1.Location = new System.Drawing.Point(54, 48);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(124, 29);
+            this.label1.Size = new System.Drawing.Size(102, 25);
             this.label1.TabIndex = 0;
             this.label1.Text = "Username";
             // 
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(148, 202);
+            this.pictureBox1.Location = new System.Drawing.Point(132, 162);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(290, 259);
+            this.pictureBox1.Size = new System.Drawing.Size(258, 207);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
             // 
             // LoginForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1141, 682);
+            this.ClientSize = new System.Drawing.Size(1014, 546);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.panel3);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.MaximizeBox = false;
             this.Name = "LoginForm";
-            this.Text = "Form1";
+            this.Text = "Simba App Login";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();

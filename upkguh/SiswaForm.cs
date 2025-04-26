@@ -62,7 +62,7 @@ namespace upkguh
 
         private void vidcndi_Click(object sender, EventArgs e)
         {
-            vidcndi.BringToFront();
+            //vidcndi.BringToFront();
         }
 
         private void siswa_FormClosed(object sender, FormClosedEventArgs e)
@@ -73,6 +73,12 @@ namespace upkguh
         private void siswa_FormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit();
+        }
+
+        private void refreshBtn_Click(object sender, EventArgs e)
+        {
+            materi1.ShowData();
+            tugas1.ShowData();
         }
     }
 }
